@@ -8,9 +8,13 @@ from adapters import SANITIZERS
 async def fetch(session, url):
     async with session.get(url) as response:
         response.raise_for_status()
-        logger.debug(response.host)
+
         html = await response.text()
-        sanitized_text = SANITIZERS[response.host](html)
+        try:
+            sanitized_text = SANITIZERS[response.host](html)
+        except KeyError:
+            logger.debug(f"{response.host} is not supported yet.")
+            raise
         return sanitized_text
 
 
