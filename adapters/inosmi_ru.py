@@ -11,7 +11,7 @@ def sanitize(html, plaintext=False):
     articles = soup.select("article.article")
 
     if len(articles) != 1:
-        raise ArticleNotFound()
+        raise ArticleNotFound
 
     article = articles[0]
     article.attrs = {}
