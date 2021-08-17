@@ -3,6 +3,9 @@ import asyncio
 from loguru import logger
 
 from adapters import SANITIZERS
+from bs4 import BeautifulSoup
+
+from adapters.html_tools import remove_all_tags, remove_buzz_tags
 
 
 async def fetch(session, url):
@@ -15,7 +18,9 @@ async def fetch(session, url):
         except KeyError:
             logger.debug(f"{response.host} is not supported yet.")
             raise
-        return sanitized_text
+        soap = BeautifulSoup(sanitized_text, "html.parser")
+        cleaned_text = remove_all_tags(soap)
+        return cleaned_text
 
 
 async def main():
